@@ -3,7 +3,7 @@
 #
 # tontonweb.py
 #       
-#  Copyright 2012-2013 Ángel Coto <codiasw@gmail.com>
+#  Copyright 2012-2016 Ángel Coto <codiasw@gmail.com>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@
 # 1.4.1.2: * Elimina el uso de urllib2 para verificar acceso a internet debido a que con esta librería se descarga la página
 #            y no solo los encabezados.
 #          * Mejora la función que verifica conexión a Internet y se utilizan dos direcciones de www.google.com
+# 1.4.1.3: * Se lograr diferenciar entre protocolo http y https.
 
 import httplib
 import smtplib
@@ -94,8 +95,8 @@ from urlparse import urlparse
 
 ### Define la identidad del programa
 programa = 'tontonweb'
-ver = '1.4.1.2'
-copyright = 'Copyright (c) 2012-2013 Ángel Coto <codiasw@gmail.com>'
+ver = '1.4.1.3'
+copyright = 'Copyright (c) 2012-2016 Ángel Coto <codiasw@gmail.com>'
 
 
 ### Inicializa mensajes
@@ -395,9 +396,12 @@ class Monitor:
 			Descargamos únicamente el encabezado del URL
 			y devolvemos el código de estado del server.
 			"""
-			host, path = urlparse(url)[1:3] #Extrae el host y el path, del url
+			proto, host, path = urlparse(url)[0:3] #Extrae el protocolo, el host y el path del url
 			try:
-				conn = httplib.HTTPConnection(host,timeout=25)
+				if proto == 'https':
+					conn = httplib.HTTPSConnection(host,timeout=25)
+				else:
+					conn = httplib.HTTPConnection(host,timeout=25)
 				conn.putrequest('HEAD', path)
 				conn.putheader('User-Agent',self.agente)
 				conn.endheaders()
