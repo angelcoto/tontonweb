@@ -77,6 +77,8 @@
 #            y no solo los encabezados.
 #          * Mejora la función que verifica conexión a Internet y se utilizan dos direcciones de www.google.com
 # 1.4.1.3: * Se lograr diferenciar entre protocolo http y https.
+# 1.4.1.4: * Se reemplaza dirección IP primaria de Google debido a que la IP
+#            anterior no respondía.
 
 import httplib
 import smtplib
@@ -95,7 +97,7 @@ from urlparse import urlparse
 
 ### Define la identidad del programa
 programa = 'tontonweb'
-ver = '1.4.1.3'
+ver = '1.4.1.4'
 copyright = 'Copyright (c) 2012-2016 Ángel Coto <codiasw@gmail.com>'
 
 
@@ -412,7 +414,7 @@ class Monitor:
 		
 		def checkinternet():
 			hayinternet = True
-			estado, mensaje, redirecion = obtieneestadourl('http://74.125.137.147') # www.google.com
+			estado, mensaje, redirecion = obtieneestadourl('http://74.125.28.147') # www.google.com
 			if estado == None: #No respondió el primer sitio
 				estado, mensaje, redirecion = obtieneestadourl('http://74.125.140.99') # www.google.com
 				if estado == None: #No respondió el segundo sitio
